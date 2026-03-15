@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Evangelion Marketing - Premium AI Agency building intelligent agents for content, ads, and growth automation.">
     <title>Evangelion Marketing | Premium AI Agency</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -13,235 +14,1133 @@
 
     <style>
         :root {
-            --bg: #111F35;
+            --bg: #0a0f1c;
+            --bg-gradient: linear-gradient(135deg, #0a0f1c 0%, #111827 50%, #0a0f1c 100%);
             --primary-red: #F63049;
             --ruby: #D02752;
             --crimson: #8A244B;
-            --text-light: #fdfdfd;
-            --glass: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --clay-shadow: 15px 15px 30px #0a121f, -10px -10px 25px #182c4b;
+            --text-light: #ffffff;
+            --text-muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(246, 48, 73, 0.4);
+            --neon-glow: 0 0 30px rgba(246, 48, 73, 0.4);
+            --neon-glow-strong: 0 0 60px rgba(246, 48, 73, 0.6);
             --font-serif: 'Playfair Display', serif;
             --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { background: var(--bg); color: var(--text-light); font-family: var(--font-sans); overflow-x: hidden; }
-
-        /* Background Visuals */
-        .grain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; pointer-events: none; z-index: 9999; }
-        .liquid-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; filter: blur(80px); opacity: 0.4; }
-        .blob { position: absolute; width: 50vw; height: 50vw; border-radius: 50%; background: linear-gradient(45deg, var(--crimson), var(--primary-red)); }
-
-        /* Navbar */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(17, 31, 53, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); z-index: 1000; }
-        .logo { display: flex; align-items: center; gap: 15px; font-family: var(--font-serif); font-size: 1.4rem; color: var(--primary-red); text-decoration: none; font-weight: 700; }
-        .logo img { width: 45px; height: 45px; border-radius: 8px; border: 1px solid var(--ruby); }
-
-        /* Hero */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 10%; }
-        .hero h1 { font-family: var(--font-serif); font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 20px; }
-        .hero p { max-width: 700px; margin-bottom: 40px; color: #cbd5e1; font-size: 1.1rem; }
-
-        /* Single Line Horizontal Layout for Features & Founders */
-        section { padding: 100px 5%; }
-        .section-title { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-red); text-align: center; margin-bottom: 50px; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
         
-        .horizontal-line { 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: center; 
-            align-items: stretch; 
-            gap: 20px; 
-            width: 100%; 
-            overflow-x: auto; /* Fallback for small screens */
-            padding-bottom: 20px;
+        body { 
+            background: var(--bg-gradient); 
+            color: var(--text-light); 
+            font-family: var(--font-sans); 
+            overflow-x: hidden;
+            line-height: 1.7;
         }
 
-        .clay-card {
-            flex: 1; /* Forces them to share the line equally */
-            min-width: 220px; /* Prevents them from getting too squished */
-            background: #182c4b; 
-            padding: 30px 20px; 
-            border-radius: 35px;
-            box-shadow: var(--clay-shadow); 
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* ===== LOADING SCREEN ===== */
+        .loader {
+            position: fixed; inset: 0; background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000; transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-content { text-align: center; }
+        .loader-logo {
+            width: 80px; height: 80px; border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin: 0 auto 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: var(--neon-glow);
+        }
+        .loader-text { font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: 3px; }
+        .loader-bar {
+            width: 200px; height: 3px; background: var(--glass);
+            border-radius: 3px; margin: 20px auto 0; overflow: hidden;
+        }
+        .loader-progress {
+            height: 100%; background: var(--primary-red);
+            width: 0%; animation: loadProgress 2s ease-out forwards;
+            box-shadow: 0 0 20px var(--primary-red);
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes loadProgress { to { width: 100%; } }
+
+        /* ===== LIQUID BACKGROUND ===== */
+        .liquid-container { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .blob { 
+            position: absolute; border-radius: 50%; 
+            background: linear-gradient(45deg, var(--crimson), var(--primary-red));
+            filter: blur(80px); opacity: 0.5;
+            animation: liquidFloat 25s ease-in-out infinite;
+        }
+        .blob:nth-child(1) { width: 700px; height: 700px; top: -15%; left: -10%; animation-delay: 0s; }
+        .blob:nth-child(2) { width: 550px; height: 550px; bottom: -20%; right: -15%; background: linear-gradient(45deg, #4b1429, var(--crimson)); animation-delay: -8s; }
+        .blob:nth-child(3) { width: 450px; height: 450px; top: 35%; left: 35%; background: linear-gradient(45deg, var(--ruby), #ff6b6b); animation-delay: -16s; }
+        
+        @keyframes liquidFloat {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(60px, -40px) scale(1.08) rotate(90deg); }
+            50% { transform: translate(-40px, 50px) scale(0.92) rotate(180deg); }
+            75% { transform: translate(50px, 30px) scale(1.05) rotate(270deg); }
         }
 
-        .clay-card i { font-size: 2.5rem; color: var(--primary-red); margin-bottom: 20px; }
-        .clay-card h3 { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-red); }
-        .clay-card p { font-size: 0.85rem; opacity: 0.8; }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--ruby); margin-bottom: 15px; object-fit: cover; }
-
-        /* Feedback Form Container */
-        .form-container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            padding: 50px;
-            border-radius: 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        /* ===== GRAIN OVERLAY ===== */
+        .grain { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: url('https://grainy-gradients.vercel.app/noise.svg'); 
+            opacity: 0.025; pointer-events: none; z-index: 9999; 
         }
 
-        .form-container input, .form-container textarea {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: white;
-            font-family: var(--font-sans);
+        /* ===== NAVBAR - GLASSMORPHISM ===== */
+        nav { 
+            position: fixed; top: 0; width: 100%; padding: 22px 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(10, 15, 28, 0.7); 
+            backdrop-filter: blur(30px) saturate(200%);
+            border-bottom: 1px solid var(--glass-border); 
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        nav.scrolled { 
+            padding: 14px 5%; 
+            background: rgba(10, 15, 28, 0.92); 
+            box-shadow: 0 10px 60px rgba(0,0,0,0.6);
+            border-bottom-color: var(--glass-border-hover);
+        }
+        
+        .logo { 
+            display: flex; align-items: center; gap: 14px; 
+            font-family: var(--font-serif); font-size: 1.45rem; 
+            color: var(--text-light); text-decoration: none; font-weight: 700;
+            transition: var(--transition);
+        }
+        .logo:hover { color: var(--primary-red); }
+        .logo img { 
+            width: 48px; height: 48px; border-radius: 14px; 
+            border: 2px solid var(--ruby); object-fit: cover;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+            transition: var(--transition);
+        }
+        .logo:hover img { border-color: var(--primary-red); transform: rotate(5deg); }
+        
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { 
+            color: var(--text-light); text-decoration: none; 
+            font-size: 0.85rem; font-weight: 600; text-transform: uppercase; 
+            letter-spacing: 1.5px; position: relative; padding: 8px 0;
+            transition: var(--transition);
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; 
+            width: 0; height: 2px; background: var(--primary-red);
+            transition: var(--transition); transform: translateX(-50%);
+        }
+        .nav-links a:hover { color: var(--primary-red); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ===== HERO SECTION ===== */
+        .hero { 
+            min-height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; 
+            padding: 140px 5% 100px; position: relative; overflow: hidden;
+        }
+        .hero-content { max-width: 1100px; z-index: 2; }
+        .hero h1 { 
+            font-family: var(--font-serif); font-size: clamp(2.8rem, 8vw, 5.5rem); 
+            margin-bottom: 28px; line-height: 1.05; font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, var(--primary-red) 60%, var(--ruby) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p { 
+            max-width: 750px; margin: 0 auto 45px; color: var(--text-muted); 
+            font-size: 1.25rem; line-height: 1.9; font-weight: 300;
+        }
+        .cta-group { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; }
+        
+        .btn {
+            padding: 18px 45px; border-radius: 50px; font-weight: 700; font-size: 1rem;
+            display: inline-flex; align-items: center; gap: 12px;
+            transition: var(--transition); text-decoration: none; cursor: pointer; border: none;
+            position: relative; overflow: hidden;
+        }
+        .btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            opacity: 1; transition: var(--transition); z-index: -1;
+        }
+        .btn-primary {
+            color: white; box-shadow: var(--neon-glow);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-4px) scale(1.03); 
+            box-shadow: var(--neon-glow-strong);
+        }
+        .btn-primary:hover::before { opacity: 1; }
+        
+        .btn-secondary {
+            background: var(--glass); color: var(--text-light);
+            border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
+        }
+        .btn-secondary:hover { 
+            background: var(--glass-hover); border-color: var(--primary-red);
+            transform: translateY(-4px); box-shadow: 0 10px 40px rgba(246, 48, 73, 0.3);
         }
 
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            background: var(--primary-red);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
+        /* ===== GLASS CARD BASE ===== */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(25px) saturate(200%);
+            border: 1px solid var(--glass-border); border-radius: 28px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .glass-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+            opacity: 0; transition: var(--transition); pointer-events: none;
+        }
+        .glass-card:hover { 
+            border-color: var(--glass-border-hover); 
+            box-shadow: 0 20px 70px rgba(246, 48, 73, 0.25);
+            transform: translateY(-8px);
+        }
+        .glass-card:hover::before { opacity: 1; }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 120px 5%; position: relative; }
+        .section-header { text-align: center; margin-bottom: 90px; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .section-tag { 
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px; background: var(--glass); 
+            border: 1px solid var(--glass-border); border-radius: 50px; 
+            color: var(--primary-red); font-size: 0.8rem; font-weight: 700;
+            margin-bottom: 24px; text-transform: uppercase; letter-spacing: 2.5px;
+        }
+        .section-title { 
+            font-family: var(--font-serif); font-size: clamp(2.2rem, 6vw, 4rem); 
+            margin-bottom: 22px; line-height: 1.15; font-weight: 700;
+        }
+        .section-subtitle { color: var(--text-muted); font-size: 1.15rem; line-height: 1.8; font-weight: 300; }
+
+        /* ===== VALUE PROPOSITION GRID ===== */
+        .value-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); 
+            gap: 32px; max-width: 1300px; margin: 0 auto;
+        }
+        .value-card { padding: 45px 35px; text-align: center; }
+        .value-icon { 
+            width: 85px; height: 85px; margin: 0 auto 24px; 
+            background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            border-radius: 24px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; box-shadow: var(--neon-glow);
+            transition: var(--transition);
+        }
+        .value-card:hover .value-icon { transform: scale(1.1) rotate(5deg); }
+        .value-card h3 { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 14px; }
+        .value-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
+
+        /* ===== AI AGENTS - HORIZONTAL SCROLL ===== */
+        .agents-wrapper { overflow: hidden; padding: 20px 0; }
+        .agents-container { 
+            display: flex; gap: 32px; padding: 20px 10px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        }
+        .agents-container::-webkit-scrollbar { height: 6px; }
+        .agents-container::-webkit-scrollbar-track { background: var(--glass); border-radius: 10px; }
+        .agents-container::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 10px; }
+        
+        .agent-card { 
+            flex: 0 0 380px; padding: 45px 35px; scroll-snap-align: start;
+        }
+        .agent-icon { 
+            width: 75px; height: 75px; background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            border-radius: 22px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.1rem; margin-bottom: 28px; box-shadow: var(--neon-glow);
+        }
+        .agent-card h3 { font-family: var(--font-serif); font-size: 1.7rem; margin-bottom: 14px; }
+        .agent-card p { color: var(--text-muted); margin-bottom: 22px; font-size: 1.05rem; }
+        .agent-features { list-style: none; }
+        .agent-features li { 
+            padding: 10px 0; color: var(--text-muted); display: flex; align-items: center; gap: 12px;
+            font-size: 0.95rem;
+        }
+        .agent-features li i { color: var(--primary-red); font-size: 0.85rem; }
+
+        /* ===== HOW IT WORKS - STEPS ===== */
+        .steps-container { 
+            display: flex; justify-content: space-between; gap: 35px; 
+            max-width: 1100px; margin: 0 auto; position: relative;
+        }
+        .steps-container::before {
+            content: ''; position: absolute; top: 55px; left: 8%; right: 8%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-red), var(--ruby), var(--crimson), transparent);
+            z-index: 0; opacity: 0.6;
+        }
+        .step { 
+            flex: 1; text-align: center; position: relative; z-index: 1;
+            background: transparent; padding: 0 15px;
+        }
+        .step-number { 
+            width: 110px; height: 110px; margin: 0 auto 24px; 
+            background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem; font-weight: 700; box-shadow: var(--neon-glow);
+            border: 6px solid var(--bg); transition: var(--transition);
+        }
+        .step:hover .step-number { transform: scale(1.1) rotate(10deg); }
+        .step h3 { font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 12px; }
+        .step p { color: var(--text-muted); font-size: 1rem; }
+
+        /* ===== TECH STACK ===== */
+        .tech-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); 
+            gap: 28px; max-width: 1000px; margin: 0 auto;
+        }
+        .tech-item { padding: 35px 25px; text-align: center; }
+        .tech-item i { font-size: 3.2rem; color: var(--primary-red); margin-bottom: 18px; transition: var(--transition); }
+        .tech-item:hover i { transform: scale(1.15) rotate(8deg); }
+        .tech-item h4 { font-size: 1.15rem; margin-bottom: 8px; font-weight: 600; }
+        .tech-item p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ===== PORTFOLIO ===== */
+        .portfolio-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 35px; max-width: 1300px; margin: 0 auto;
+        }
+        .portfolio-item { 
+            position: relative; overflow: hidden; border-radius: 24px;
+            aspect-ratio: 4/3; cursor: pointer;
+        }
+        .portfolio-item img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .portfolio-overlay {
+            position: absolute; inset: 0; 
+            background: linear-gradient(to top, rgba(10,15,28,0.95) 0%, rgba(10,15,28,0.6) 50%, transparent 100%);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 35px;
+            opacity: 0; transition: var(--transition);
+        }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-item:hover img { transform: scale(1.12); }
+        .portfolio-overlay h3 { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 10px; }
+        .portfolio-overlay p { color: var(--text-muted); font-size: 1rem; }
+
+        /* ===== FOUNDERS ===== */
+        .founders-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); 
+            gap: 35px; max-width: 1300px; margin: 0 auto;
+        }
+        .founder-card { padding: 45px 35px; text-align: center; }
+        .founder-img { 
+            width: 150px; height: 150px; border-radius: 50%; 
+            border: 4px solid var(--ruby); margin: 0 auto 24px; 
+            object-fit: cover; box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+            transition: var(--transition);
+        }
+        .founder-card:hover .founder-img { 
+            transform: scale(1.08) rotate(3deg); border-color: var(--primary-red);
+            box-shadow: 0 20px 60px rgba(246, 48, 73, 0.4);
+        }
+        .founder-card h3 { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 6px; }
+        .founder-role { color: var(--primary-red); font-weight: 600; margin-bottom: 16px; font-size: 1rem; }
+        .founder-card p { color: var(--text-muted); font-size: 0.98rem; line-height: 1.7; }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials-wrapper { overflow: hidden; padding: 20px 0; }
+        .testimonials-container { 
+            display: flex; gap: 32px; padding: 20px 10px;
+            scroll-snap-type: x mandatory;
+        }
+        .testimonial-card { flex: 0 0 420px; padding: 45px 40px; scroll-snap-align: start; }
+        .testimonial-card::before {
+            content: '"'; position: absolute; top: 25px; left: 35px; 
+            font-size: 7rem; color: var(--primary-red); opacity: 0.15;
+            font-family: var(--font-serif); line-height: 1; pointer-events: none;
+        }
+        .testimonial-text { 
+            color: var(--text-muted); font-size: 1.1rem; line-height: 1.9; 
+            margin-bottom: 30px; position: relative; z-index: 1; font-style: italic;
+        }
+        .testimonial-author { display: flex; align-items: center; gap: 16px; }
+        .author-avatar { 
+            width: 55px; height: 55px; border-radius: 50%; 
+            background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem;
+        }
+        .author-info h4 { font-size: 1.05rem; margin-bottom: 4px; }
+        .author-info p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ===== ANALYTICS DASHBOARD ===== */
+        .dashboard-preview { 
+            max-width: 1050px; margin: 0 auto; padding: 50px;
+            background: linear-gradient(135deg, rgba(246, 48, 73, 0.08), rgba(138, 36, 75, 0.08));
+            border-radius: 35px; border: 1px solid var(--glass-border);
+        }
+        .dashboard-mockup { 
+            background: rgba(15, 23, 42, 0.8); border-radius: 24px; padding: 35px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.6); border: 1px solid var(--glass-border);
+        }
+        .dashboard-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 35px; padding-bottom: 25px; border-bottom: 1px solid var(--glass-border);
+        }
+        .dashboard-header h3 { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; }
+        .dashboard-header h3 i { color: var(--primary-red); }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .stat-card { 
+            background: var(--glass); padding: 30px 25px; border-radius: 18px; 
+            text-align: center; border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
+        .stat-value { font-size: 2.8rem; font-weight: 700; color: var(--primary-red); margin-bottom: 6px; }
+        .stat-label { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ===== BENEFITS ===== */
+        .benefits-list { max-width: 900px; margin: 0 auto; display: grid; gap: 24px; }
+        .benefit-item { 
+            display: flex; align-items: center; gap: 24px; padding: 30px;
+            transition: var(--transition);
+        }
+        .benefit-item:hover { transform: translateX(12px); border-color: var(--primary-red); }
+        .benefit-icon { 
+            width: 65px; height: 65px; background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; flex-shrink: 0; box-shadow: var(--neon-glow);
+        }
+        .benefit-content h3 { font-size: 1.3rem; margin-bottom: 6px; font-weight: 600; }
+        .benefit-content p { color: var(--text-muted); font-size: 1rem; }
+
+        /* ===== VISION SECTION ===== */
+        .vision-section { 
+            text-align: center; padding: 140px 5%; 
+            background: linear-gradient(135deg, rgba(246, 48, 73, 0.06), rgba(138, 36, 75, 0.06));
+            position: relative; overflow: hidden;
+        }
+        .vision-section::before, .vision-section::after {
+            content: ''; position: absolute; width: 400px; height: 400px; 
+            background: var(--primary-red); border-radius: 50%; filter: blur(120px); opacity: 0.25;
+            animation: visionPulse 8s ease-in-out infinite;
+        }
+        .vision-section::before { top: -150px; left: -150px; animation-delay: 0s; }
+        .vision-section::after { bottom: -150px; right: -150px; animation-delay: -4s; }
+        @keyframes visionPulse { 0%, 100% { opacity: 0.25; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.1); } }
+        
+        .vision-content { position: relative; z-index: 1; max-width: 850px; margin: 0 auto; }
+        .vision-section h2 { 
+            font-family: var(--font-serif); font-size: clamp(2.2rem, 6vw, 4rem); 
+            margin-bottom: 24px; line-height: 1.15;
+        }
+        .vision-section p { color: var(--text-muted); font-size: 1.25rem; line-height: 1.9; font-weight: 300; }
+
+        /* ===== CONTACT FORM ===== */
+        .form-container { max-width: 750px; margin: 0 auto; padding: 55px; }
+        .form-group { margin-bottom: 28px; }
+        .form-group label { 
+            display: block; margin-bottom: 10px; font-weight: 600; 
+            color: var(--text-light); font-size: 0.95rem; letter-spacing: 0.5px;
+        }
+        .form-group input, .form-group textarea { 
+            width: 100%; padding: 18px 22px; 
+            background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 14px; color: white; font-family: var(--font-sans);
+            font-size: 1.05rem; transition: var(--transition);
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--primary-red);
+            box-shadow: 0 0 0 5px rgba(246, 48, 73, 0.15);
+            background: var(--glass-hover);
+        }
+        .form-group textarea { min-height: 160px; resize: vertical; }
+
+        /* ===== SOCIAL SECTION ===== */
+        .social-section { 
+            text-align: center; padding: 70px 5%; 
+            border-top: 1px solid var(--glass-border);
+        }
+        .social-section h3 { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 12px; }
+        .social-section p { color: var(--text-muted); margin-bottom: 35px; }
+        .social-links { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; }
+        .social-link { 
+            width: 65px; height: 65px; border-radius: 50%; 
+            background: var(--glass); border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary-red); font-size: 1.6rem; text-decoration: none;
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .social-link::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--primary-red), var(--ruby));
+            opacity: 0; transition: var(--transition); z-index: -1;
+        }
+        .social-link:hover { 
+            color: white; transform: translateY(-7px) scale(1.1); 
+            border-color: transparent; box-shadow: var(--neon-glow);
+        }
+        .social-link:hover::before { opacity: 1; }
+
+        /* ===== FOOTER ===== */
+        footer { 
+            text-align: center; padding: 50px 5% 30px; 
+            border-top: 1px solid var(--glass-border); 
+            color: var(--text-muted); font-size: 0.95rem;
+        }
+        footer a { color: var(--primary-red); text-decoration: none; transition: var(--transition); }
+        footer a:hover { opacity: 1; text-decoration: underline; }
+        .footer-links { margin: 20px 0; }
+        .footer-links a { margin: 0 15px; font-weight: 500; }
+
+        /* ===== SCROLL DIRECTION ANIMATIONS ===== */
+        .scroll-up { animation: slideUp 0.7s ease-out forwards; }
+        .scroll-down { animation: slideDown 0.7s ease-out forwards; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .submit-btn:hover { background: var(--ruby); transform: scale(1.02); }
+        /* ===== PARALLAX ELEMENTS ===== */
+        .parallax { will-change: transform; }
 
-        /* Social Icons */
-        .social-row { display: flex; justify-content: center; gap: 30px; margin: 40px 0; }
-        .social-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--glass); display: flex; justify-content: center; align-items: center; color: var(--primary-red); font-size: 1.5rem; border: 1px solid var(--glass-border); text-decoration: none; transition: 0.4s; }
-        .social-icon:hover { background: var(--primary-red); color: white; transform: translateY(-5px); }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .steps-container { flex-direction: column; align-items: center; }
+            .steps-container::before { display: none; }
+            .dashboard-stats { grid-template-columns: 1fr 1fr; }
+            .agent-card { flex: 0 0 320px; }
+            .testimonial-card { flex: 0 0 360px; }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding: 120px 5% 80px; }
+            .hero h1 { font-size: clamp(2.2rem, 8vw, 4rem); }
+            .cta-group { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 320px; justify-content: center; }
+            section { padding: 90px 5%; }
+            .dashboard-stats { grid-template-columns: 1fr; }
+            .agent-card { flex: 0 0 290px; padding: 40px 30px; }
+            .testimonial-card { flex: 0 0 320px; padding: 40px 30px; }
+            .form-container { padding: 45px 30px; }
+            .value-card, .founder-card, .tech-item { padding: 40px 30px; }
+        }
 
-        footer { text-align: center; padding: 40px; border-top: 1px solid var(--crimson); opacity: 0.5; font-size: 0.8rem; }
-
-        /* Hide scrollbar for horizontal line */
-        .horizontal-line::-webkit-scrollbar { display: none; }
+        @media (max-width: 480px) {
+            .logo span { display: none; }
+            .logo img { width: 42px; height: 42px; }
+            .section-title { font-size: clamp(1.8rem, 7vw, 2.8rem); }
+            .agent-card { flex: 0 0 270px; min-width: 270px; }
+            .testimonial-card { flex: 0 0 290px; min-width: 290px; }
+            .stat-value { font-size: 2.3rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="grain"></div>
-    <div class="liquid-container">
-        <div class="blob" id="blob1" style="top: -10%; left: -10%;"></div>
-        <div class="blob" id="blob2" style="bottom: -10%; right: -10%; background: linear-gradient(45deg, #4b1429, var(--crimson));"></div>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">⚡</div>
+            <div class="loader-text">EVANGELION</div>
+            <div class="loader-bar"><div class="loader-progress"></div></div>
+        </div>
     </div>
 
-    <nav>
+    <!-- Background Effects -->
+    <div class="grain"></div>
+    <div class="liquid-container">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
         <a href="#" class="logo">
-            <img src="C:\Users\meet\OneDrive\Desktop\logo.jpeg" alt="Logo">
-            EVANGELION
+            <img src="C:\Users\meet\OneDrive\Desktop\logo.jpeg" alt="Evangelion Logo" onerror="this.style.display='none'">
+            <span>EVANGELION</span>
         </a>
-        <div style="display: flex; gap: 20px;">
-            <a href="#services" style="color:white; text-decoration:none; font-size:0.8rem; font-weight:600;">SERVICES</a>
-            <a href="#founders" style="color:white; text-decoration:none; font-size:0.8rem; font-weight:600;">FOUNDERS</a>
-            <a href="#feedback" style="color:white; text-decoration:none; font-size:0.8rem; font-weight:600;">FEEDBACK</a>
+        <div class="nav-links">
+            <a href="#agents">AI Agents</a>
+            <a href="#how-it-works">Process</a>
+            <a href="#portfolio">Work</a>
+            <a href="#founders">Team</a>
+            <a href="#contact">Contact</a>
         </div>
     </nav>
 
+    <!-- Hero -->
     <section class="hero">
-        <h1 id="hero-title">AI-Powered Marketing.<br>Designed for the Future.</h1>
-        <p id="hero-sub">Evangelion Marketing builds intelligent AI agents that create content, generate advertisements, and automate marketing growth.</p>
-        <a href="#feedback" style="padding: 15px 35px; background: var(--primary-red); color: white; text-decoration: none; border-radius: 50px; font-weight: 700;">Start Your Project</a>
-    </section>
-
-    <section id="services">
-        <h2 class="section-title">Core Features</h2>
-        <div class="horizontal-line">
-            <div class="clay-card">
-                <i class="fas fa-chart-line"></i>
-                <h3>Trading Agent</h3>
-                <p>Real-time analysis & insights.</p>
-            </div>
-            <div class="clay-card">
-                <i class="fas fa-robot"></i>
-                <h3>Content Bot</h3>
-                <p>Automated premium copy.</p>
-            </div>
-            <div class="clay-card">
-                <i class="fas fa-wand-magic-sparkles"></i>
-                <h3>AI Posters</h3>
-                <p>Visual asset generation.</p>
-            </div>
-            <div class="clay-card">
-                <i class="fas fa-bullhorn"></i>
-                <h3>Ad Architect</h3>
-                <p>Scalable brand campaigns.</p>
+        <div class="hero-content">
+            <h1 class="anim-hero">AI-Powered Marketing.<br>Designed for the Future.</h1>
+            <p class="anim-hero">Evangelion Marketing builds intelligent AI agents that create content, generate advertisements, and automate marketing growth with unprecedented precision.</p>
+            <div class="cta-group anim-hero">
+                <a href="#contact" class="btn btn-primary"><i class="fas fa-rocket"></i> Start Your Project</a>
+                <a href="#portfolio" class="btn btn-secondary"><i class="fas fa-play"></i> View Our Work</a>
             </div>
         </div>
     </section>
 
+    <!-- Value Proposition -->
+    <section id="value-prop">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-star"></i> Why Choose Us</span>
+            <h2 class="section-title">The Evangelion Advantage</h2>
+            <p class="section-subtitle">We combine cutting-edge AI technology with premium design to deliver marketing solutions that actually convert.</p>
+        </div>
+        <div class="value-grid">
+            <div class="glass-card value-card">
+                <div class="value-icon"><i class="fas fa-brain"></i></div>
+                <h3>AI-Driven Strategy</h3>
+                <p>Machine learning algorithms analyze market trends and consumer behavior to optimize every campaign.</p>
+            </div>
+            <div class="glass-card value-card">
+                <div class="value-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Lightning Fast</h3>
+                <p>Generate weeks of content in minutes. Our AI agents work 24/7 to keep your brand ahead.</p>
+            </div>
+            <div class="glass-card value-card">
+                <div class="value-icon"><i class="fas fa-gem"></i></div>
+                <h3>Premium Quality</h3>
+                <p>Enterprise-grade outputs with human-level creativity. No generic templates, only unique assets.</p>
+            </div>
+            <div class="glass-card value-card">
+                <div class="value-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Data-Backed Results</h3>
+                <p>Real-time analytics and performance tracking ensure continuous optimization and ROI growth.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Agents -->
+    <section id="agents">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-robot"></i> Our Technology</span>
+            <h2 class="section-title">AI Marketing Agents</h2>
+            <p class="section-subtitle">Intelligent systems designed to automate and elevate every aspect of your marketing.</p>
+        </div>
+        <div class="agents-wrapper">
+            <div class="agents-container">
+                <div class="glass-card agent-card">
+                    <div class="agent-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Trading Agent</h3>
+                    <p>Advanced market analysis and predictive insights for data-driven decisions.</p>
+                    <ul class="agent-features">
+                        <li><i class="fas fa-check"></i> Real-time market scanning</li>
+                        <li><i class="fas fa-check"></i> Predictive analytics</li>
+                        <li><i class="fas fa-check"></i> Risk assessment</li>
+                        <li><i class="fas fa-check"></i> Automated reporting</li>
+                    </ul>
+                </div>
+                <div class="glass-card agent-card">
+                    <div class="agent-icon"><i class="fas fa-pen-nib"></i></div>
+                    <h3>Content Creator</h3>
+                    <p>Generate blogs, captions, and marketing copy that resonates with your audience.</p>
+                    <ul class="agent-features">
+                        <li><i class="fas fa-check"></i> SEO-optimized articles</li>
+                        <li><i class="fas fa-check"></i> Social media captions</li>
+                        <li><i class="fas fa-check"></i> Email campaigns</li>
+                        <li><i class="fas fa-check"></i> Brand voice consistency</li>
+                    </ul>
+                </div>
+                <div class="glass-card agent-card">
+                    <div class="agent-icon"><i class="fas fa-image"></i></div>
+                    <h3>Poster Generator</h3>
+                    <p>Create stunning promotional posters automatically with AI-powered design.</p>
+                    <ul class="agent-features">
+                        <li><i class="fas fa-check"></i> Custom templates</li>
+                        <li><i class="fas fa-check"></i> Brand color matching</li>
+                        <li><i class="fas fa-check"></i> Multi-format export</li>
+                        <li><i class="fas fa-check"></i> A/B testing ready</li>
+                    </ul>
+                </div>
+                <div class="glass-card agent-card">
+                    <div class="agent-icon"><i class="fas fa-ad"></i></div>
+                    <h3>Ad Architect</h3>
+                    <p>Build high-converting ad creatives for all major platforms automatically.</p>
+                    <ul class="agent-features">
+                        <li><i class="fas fa-check"></i> Multi-platform ads</li>
+                        <li><i class="fas fa-check"></i> Audience targeting</li>
+                        <li><i class="fas fa-check"></i> Performance optimization</li>
+                        <li><i class="fas fa-check"></i> Budget management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Automation -->
+    <section id="automation">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-sync-alt"></i> Automation</span>
+            <h2 class="section-title">AI-Powered Automation</h2>
+            <p class="section-subtitle">Set it and forget it. Our automation handles the heavy lifting.</p>
+        </div>
+        <div class="benefits-list">
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-robot"></i></div>
+                <div class="benefit-content">
+                    <h3>Automated Campaign Generation</h3>
+                    <p>Create complete marketing campaigns from a single brief. AI handles strategy, content, and scheduling.</p>
+                </div>
+            </div>
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="benefit-content">
+                    <h3>Social Media Scheduling</h3>
+                    <p>Intelligent posting times based on audience activity. Never miss optimal engagement windows.</p>
+                </div>
+            </div>
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-sync-alt"></i></div>
+                <div class="benefit-content">
+                    <h3>AI Content Pipelines</h3>
+                    <p>Continuous content generation that scales with your needs. From one post to thousands.</p>
+                </div>
+            </div>
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-file-alt"></i></div>
+                <div class="benefit-content">
+                    <h3>Automated Analytics Reports</h3>
+                    <p>Weekly and monthly performance reports delivered automatically with actionable insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Dashboard -->
+    <section id="analytics">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-chart-pie"></i> Intelligence</span>
+            <h2 class="section-title">Smart Analytics Dashboard</h2>
+            <p class="section-subtitle">Real-time insights that drive better decisions.</p>
+        </div>
+        <div class="dashboard-preview">
+            <div class="dashboard-mockup">
+                <div class="dashboard-header">
+                    <h3><i class="fas fa-chart-pie"></i> Campaign Performance</h3>
+                    <span style="color: var(--text-muted);">Last 30 Days</span>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">284%</div>
+                        <div class="stat-label">ROI Increase</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1.2M</div>
+                        <div class="stat-label">Impressions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">45K</div>
+                        <div class="stat-label">Engagements</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-cogs"></i> Process</span>
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Four simple steps to transform your marketing.</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Choose Service</h3>
+                <p>Select the AI agent that fits your marketing needs.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Generate Assets</h3>
+                <p>Our AI creates premium marketing materials in minutes.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Launch Campaigns</h3>
+                <p>Deploy across platforms with one click.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Track Growth</h3>
+                <p>Monitor performance and optimize in real-time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech-stack">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-code"></i> Technology</span>
+            <h2 class="section-title">Our Tech Stack</h2>
+            <p class="section-subtitle">Built with cutting-edge tools for maximum performance.</p>
+        </div>
+        <div class="tech-grid">
+            <div class="glass-card tech-item">
+                <i class="fas fa-code"></i>
+                <h4>GSAP Animations</h4>
+                <p>Smooth, performant motion design</p>
+            </div>
+            <div class="glass-card tech-item">
+                <i class="fas fa-cube"></i>
+                <h4>Three.js</h4>
+                <p>3D visual effects & rendering</p>
+            </div>
+            <div class="glass-card tech-item">
+                <i class="fas fa-brain"></i>
+                <h4>Machine Learning</h4>
+                <p>Advanced AI models</p>
+            </div>
+            <div class="glass-card tech-item">
+                <i class="fas fa-cloud"></i>
+                <h4>Cloud Infrastructure</h4>
+                <p>Scalable & reliable</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-folder-open"></i> Portfolio</span>
+            <h2 class="section-title">Our Work</h2>
+            <p class="section-subtitle">Premium marketing assets created by our AI agents.</p>
+        </div>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <img src="C:\Users\meet\OneDrive\Desktop\mock 1.jpg" alt="Marketing Campaign 1" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%231a1f2e%22 width=%22400%22 height=%22300%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23F63049%22 font-size=%2224%22>Mock 1</text></svg>'">
+                <div class="portfolio-overlay">
+                    <h3>Brand Campaign</h3>
+                    <p>AI-generated social media campaign with 300% engagement increase</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="C:\Users\meet\OneDrive\Desktop\mock 2.jpg" alt="Marketing Campaign 2" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%231a1f2e%22 width=%22400%22 height=%22300%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23F63049%22 font-size=%2224%22>Mock 2</text></svg>'">
+                <div class="portfolio-overlay">
+                    <h3>Product Launch</h3>
+                    <p>Complete ad creative suite for tech startup launch</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="C:\Users\meet\OneDrive\Desktop\mock 3.jpg" alt="Marketing Campaign 3" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%231a1f2e%22 width=%22400%22 height=%22300%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23F63049%22 font-size=%2224%22>Mock 3</text></svg>'">
+                <div class="portfolio-overlay">
+                    <h3>E-commerce Ads</h3>
+                    <p>High-converting product advertisements</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section id="benefits">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-gift"></i> Benefits</span>
+            <h2 class="section-title">Client Benefits</h2>
+            <p class="section-subtitle">What you gain when you partner with Evangelion.</p>
+        </div>
+        <div class="benefits-list">
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="benefit-content">
+                    <h3>Faster Campaigns</h3>
+                    <p>Launch marketing campaigns 10x faster than traditional methods.</p>
+                </div>
+            </div>
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-coins"></i></div>
+                <div class="benefit-content">
+                    <h3>Lower Costs</h3>
+                    <p>Reduce creative production costs by up to 70% with AI automation.</p>
+                </div>
+            </div>
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="benefit-content">
+                    <h3>AI-Driven Insights</h3>
+                    <p>Make data-backed decisions with predictive analytics.</p>
+                </div>
+            </div>
+            <div class="glass-card benefit-item">
+                <div class="benefit-icon"><i class="fas fa-palette"></i></div>
+                <div class="benefit-content">
+                    <h3>Premium Assets</h3>
+                    <p>Enterprise-quality visual content that stands out.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-quote-right"></i> Testimonials</span>
+            <h2 class="section-title">What Clients Say</h2>
+            <p class="section-subtitle">Real results from real businesses.</p>
+        </div>
+        <div class="testimonials-wrapper">
+            <div class="testimonials-container">
+                <div class="glass-card testimonial-card">
+                    <p class="testimonial-text">Evangelion transformed our marketing completely. The AI agents work flawlessly and we've seen a 300% increase in engagement.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SK</div>
+                        <div class="author-info">
+                            <h4>Sarah Khan</h4>
+                            <p>CEO, TechStart Inc.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card testimonial-card">
+                    <p class="testimonial-text">The automation is incredible. We save 20+ hours per week on content creation while maintaining premium quality.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <h4>Michael Rodriguez</h4>
+                            <p>Marketing Director, GrowthLabs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card testimonial-card">
+                    <p class="testimonial-text">Best investment we've made. The AI-generated ads outperform our previous campaigns by 250%.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">EP</div>
+                        <div class="author-info">
+                            <h4>Emma Parker</h4>
+                            <p>Founder, StyleHub</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founders -->
     <section id="founders">
-        <h2 class="section-title">The Architects</h2>
-        <div class="horizontal-line">
-            <div class="clay-card">
-                <img src="C:\Users\meet\OneDrive\Desktop\mpm.jpeg" class="profile-img">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-users"></i> Leadership</span>
+            <h2 class="section-title">The Architects</h2>
+            <p class="section-subtitle">Meet the visionaries behind Evangelion Marketing.</p>
+        </div>
+        <div class="founders-grid">
+            <div class="glass-card founder-card">
+                <img src="C:\Users\meet\OneDrive\Desktop\mpm.jpeg" alt="Meet Malpani" class="founder-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 150 150%22><rect fill=%22%23D02752%22 width=%22150%22 height=%22150%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2250%22 font-weight=%22bold%22>MM</text></svg>'">
                 <h3>Meet Malpani</h3>
-                <p>Systems Architect</p>
+                <div class="founder-role">Founder & AI Systems Architect</div>
+                <p>Visionary leader specializing in AI system architecture and machine learning integration for marketing automation.</p>
             </div>
-            <div class="clay-card">
-                <img src="C:\Users\meet\OneDrive\Desktop\nived.jpeg" class="profile-img">
+            <div class="glass-card founder-card">
+                <img src="C:\Users\meet\OneDrive\Desktop\nived.jpeg" alt="Nived Chandrasudan" class="founder-img" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 150 150%22><rect fill=%22%23D02752%22 width=%22150%22 height=%22150%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2250%22 font-weight=%22bold%22>NC</text></svg>'">
                 <h3>Nived Chandrasudan</h3>
-                <p>Tech Strategist</p>
+                <div class="founder-role">Co-Founder & Tech Strategist</div>
+                <p>Technology strategist with expertise in scaling AI infrastructure and optimizing marketing tech stacks.</p>
             </div>
-            <div class="clay-card">
-                <img src="C:\Users\meet\OneDrive\Desktop\kanishk.jpeg" class="profile-img">
+            <div class="glass-card founder-card">
+                <img src="C:\Users\meet\OneDrive\Desktop\kanishk.jpeg" alt="Kanishk Juvan" class="founder-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 150 150%22><rect fill=%22%23D02752%22 width=%22150%22 height=%22150%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2250%22 font-weight=%22bold%22>KJ</text></svg>'">
                 <h3>Kanishk Juvan</h3>
-                <p>Creative Director</p>
+                <div class="founder-role">Co-Founder & Creative Director</div>
+                <p>Creative visionary blending art and technology to produce stunning, conversion-focused marketing assets.</p>
             </div>
-            <div class="clay-card">
-                <img src="C:\Users\meet\OneDrive\Desktop\rudra.jpeg" class="profile-img">
+            <div class="glass-card founder-card">
+                <img src="C:\Users\meet\OneDrive\Desktop\rudra.jpeg" alt="Rudra Singh" class="founder-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 150 150%22><rect fill=%22%23D02752%22 width=%22150%22 height=%22150%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2250%22 font-weight=%22bold%22>RS</text></svg>'">
                 <h3>Rudra Singh</h3>
-                <p>Growth Strategist</p>
+                <div class="founder-role">Co-Founder & Growth Strategist</div>
+                <p>Growth expert focused on data-driven marketing strategies and scalable customer acquisition.</p>
             </div>
         </div>
     </section>
 
-    <section id="feedback">
-        <h2 class="section-title">Project Feedback</h2>
-        <div class="form-container scroll-reveal">
+    <!-- Vision -->
+    <section class="vision-section">
+        <div class="vision-content">
+            <h2>Building the Future of AI-Powered Marketing</h2>
+            <p>We're not just creating tools—we're revolutionizing how businesses connect with their audiences. Our mission is to make enterprise-level marketing automation accessible to everyone.</p>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="section-header">
+            <span class="section-tag"><i class="fas fa-paper-plane"></i> Get In Touch</span>
+            <h2 class="section-title">Start Your Project</h2>
+            <p class="section-subtitle">Ready to transform your marketing? Let's talk.</p>
+        </div>
+        <div class="glass-card form-container">
             <form action="https://formsubmit.co/meetmalpani9b.school@gmail.com" method="POST">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" rows="5" placeholder="Tell us about your project vision..." required></textarea>
-                <button type="submit" class="submit-btn">Transmit Message</button>
+                <input type="hidden" name="_captcha" value="false">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Project Details</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your project, goals, and timeline..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
             </form>
         </div>
     </section>
 
-    <div class="social-row">
-        <a href="mailto:meetmalpani9b.school@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
-        <a href="https://youtube.com/@meetmalpani" class="social-icon" target="_blank"><i class="fab fa-youtube"></i></a>
-        <a href="https://www.instagram.com/meet_malpani_10" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
+    <!-- Social -->
+    <div class="social-section">
+        <h3>Follow Our Journey</h3>
+        <p>Stay updated with the latest in AI marketing</p>
+        <div class="social-links">
+            <a href="mailto:meetmalpani9b.school@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/917972114036" class="social-link" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@meetmalpani" class="social-link" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/meet_malpani_10" class="social-link" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
     </div>
 
+    <!-- Footer -->
     <footer>
         <p>&copy; 2026 Evangelion Marketing. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="#agents">AI Agents</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <p style="font-size: 0.85rem; opacity: 0.7;">Built with passion & precision</p>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hero Entrance
-        gsap.from("#hero-title", { y: 50, opacity: 0, duration: 1.5, ease: "power4.out" });
-        gsap.from("#hero-sub", { opacity: 0, duration: 1.5, delay: 0.5 });
-
-        // Blob Animation
-        gsap.to("#blob1", { x: "10vw", y: "10vh", duration: 15, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        gsap.to("#blob2", { x: "-10vw", y: "-10vh", duration: 20, repeat: -1, yoyo: true, ease: "sine.inOut" });
-
-        // Form Reveal
-        gsap.from(".scroll-reveal", {
-            scrollTrigger: { trigger: ".scroll-reveal", start: "top 90%" },
-            y: 50, opacity: 0, duration: 1, ease: "power2.out"
+        // Hide loader after page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                initAnimations();
+            }, 2200);
         });
+
+        function initAnimations() {
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                navbar.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // Hero entrance animation
+            gsap.from('.anim-hero', {
+                y: 60, opacity: 0, duration: 1.2, stagger: 0.25,
+                ease: 'power4.out', delay: 0.3
+            });
+
+            // Scroll direction detection for up/down animations
+            let lastScroll = 0;
+            const scrollElements = document.querySelectorAll('.glass-card, .section-title, .section-subtitle, .value-card, .agent-card, .step, .tech-item, .portfolio-item, .founder-card, .testimonial-card, .benefit-item, .form-container');
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                const scrollDirection = currentScroll > lastScroll ? 'down' : 'up';
+                
+                scrollElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const isVisible = rect.top < window.innerHeight * 0.85 && rect.bottom > 0;
+                    
+                    if (isVisible && !el.classList.contains('animated')) {
+                        el.classList.add('animated');
+                        el.classList.add(scrollDirection === 'up' ? 'scroll-up' : 'scroll-down');
+                    }
+                });
+                
+                lastScroll = currentScroll;
+            });
+
+            // GSAP ScrollTrigger for staggered reveals
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const cards = section.querySelectorAll('.glass-card');
+                if (cards.length > 0) {
+                    gsap.from(cards, {
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 80%',
+                            toggleActions: 'play none none none'
+                        },
+                        y: 50, opacity: 0, duration: 0.9, stagger: 0.15,
+                        ease: 'power3.out'
+                    });
+                }
+            });
+
+            // Parallax effect for blobs on scroll
+            const blobs = document.querySelectorAll('.blob');
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                blobs.forEach((blob, index) => {
+                    const speed = 0.02 + (index * 0.015);
+                    const yPos = scrolled * speed;
+                    blob.style.transform = `translateY(${yPos}px)`;
+                });
+            });
+
+            // Mouse move parallax for subtle depth
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                
+                blobs.forEach((blob, index) => {
+                    const depth = (index + 1) * 0.5;
+                    blob.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+                });
+            });
+
+            // Smooth scroll for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Form button hover effect
+            const submitBtn = document.querySelector('.submit-btn, .btn-primary[type="submit"]');
+            if (submitBtn) {
+                submitBtn.addEventListener('mouseenter', () => {
+                    gsap.to(submitBtn, { scale: 1.03, duration: 0.3, ease: 'power2.out' });
+                });
+                submitBtn.addEventListener('mouseleave', () => {
+                    gsap.to(submitBtn, { scale: 1, duration: 0.3, ease: 'power2.out' });
+                });
+            }
+        }
+
+        // Fallback: trigger animations immediately if JS loads after scroll
+        if (document.readyState === 'complete') {
+            setTimeout(() => {
+                document.getElementById('loader')?.classList.add('hidden');
+                initAnimations();
+            }, 500);
+        }
     </script>
 </body>
 </html>
